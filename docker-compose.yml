@@ -1,0 +1,30 @@
+version: "3.1"
+
+services:
+  php:
+    ports:
+      - 80:80
+    build: .
+    environment:
+      DATABASE_URL: db
+      USER: root
+      PASSWORD: secret
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=caching_sha2_password
+    restart: always
+    volumes:
+      - demoscene_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: near
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8000:8080
+
+volumes:
+  demoscene_db: null
